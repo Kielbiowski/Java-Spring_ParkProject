@@ -27,14 +27,22 @@ public class UserController {
         return "userRegister";
     }
 
-    @PostMapping(path = "/register",produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody
-    public String registerPost(@Valid UserDTO userDTO, BindingResult bindingResult) {
-        if(!bindingResult.hasErrors()){
+    @PostMapping(path = "/register")
+    public String registerPost(Model model, @Valid UserDTO userDTO, BindingResult bindingResult) {
+        if (!bindingResult.hasErrors()
+                && !userDTO.getEmail().isEmpty()
+                && !userDTO.getPassword().isEmpty()
+                && userDTO.getAccountBalance().equals(0)) {
             userService.create(userDTO);
-            return "Zarejestrowano pomyślnie";
+            model.addAttribute("success", true);
         }
-        return "Operacja zakończona niepowodzeniem";
+        model.addAttribute("userDTO", userDTO);
+        return "userRegister";
     }
 
+    @GetMapping(path = "/user")
+    public String userGet(Model model, @RequestParam(name = "id", required = true) Integer mockId) {
+        model.addAttribute("userDTO", userService.findById(mockId));
+        return "user";
+    }
 }

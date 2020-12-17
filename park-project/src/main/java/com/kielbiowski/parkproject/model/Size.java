@@ -1,4 +1,4 @@
-package com.kielbiowski.parkproject.models;
+package com.kielbiowski.parkproject.model;
 
 public enum Size {
     SMALL,MEDIUM,LARGE;

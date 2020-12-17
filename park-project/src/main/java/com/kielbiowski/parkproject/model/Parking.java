@@ -1,4 +1,4 @@
-package com.kielbiowski.parkproject.models;
+package com.kielbiowski.parkproject.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

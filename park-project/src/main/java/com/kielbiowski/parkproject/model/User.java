@@ -1,4 +1,4 @@
-package com.kielbiowski.parkproject.models;
+package com.kielbiowski.parkproject.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,7 +36,7 @@ public class User {
     private Integer phoneNumber;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<User> users;
+    private List<Spot> spots;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Car> cars;

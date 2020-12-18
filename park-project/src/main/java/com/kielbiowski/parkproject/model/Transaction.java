@@ -1,4 +1,4 @@
-package com.kielbiowski.parkproject.models;
+package com.kielbiowski.parkproject.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +12,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Request {
+public class Transaction {
     @Id
     @GeneratedValue
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "spot_id")
+    private Spot spot;
 
     @ManyToOne
     @JoinColumn(name = "car_id")
@@ -24,6 +28,9 @@ public class Request {
     @Column(nullable = false)
     private LocalDateTime startDateTime;
 
-    @Column(nullable = false)
+    @Column
     private LocalDateTime endDateTime;
+
+    @Column
+    private Integer amount;
 }

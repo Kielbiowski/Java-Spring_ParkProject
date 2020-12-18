@@ -1,9 +1,8 @@
-package com.kielbiowski.parkproject.models;
+package com.kielbiowski.parkproject.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.TypeAlias;
 
 import javax.persistence.*;
 import java.util.List;
@@ -31,7 +30,7 @@ public class Spot {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private String size;
+    private Size size;
 
     @OneToOne(mappedBy = "spot")
     private Car car;

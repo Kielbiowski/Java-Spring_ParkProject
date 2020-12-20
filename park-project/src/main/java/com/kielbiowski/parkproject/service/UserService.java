@@ -1,12 +1,14 @@
 package com.kielbiowski.parkproject.service;
 
+import com.kielbiowski.parkproject.dto.CarDTO;
+import com.kielbiowski.parkproject.dto.ParkingDTO;
+import com.kielbiowski.parkproject.dto.SpotDTO;
 import com.kielbiowski.parkproject.dto.UserDTO;
 import com.kielbiowski.parkproject.exception.NotFoundException;
 import com.kielbiowski.parkproject.model.User;
 import com.kielbiowski.parkproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,11 +27,6 @@ public class UserService {
         return UserDTO.toUserDTO(userRepository.findById(id).orElseThrow(NotFoundException::new));
     }
 
-    public List<UserDTO> findAll(){
-        return userRepository.findAll().stream().map(UserDTO::toUserDTO).collect(Collectors.toList());
-    }
-
-    @Transactional
     public UserDTO create(UserDTO userDTO) {
         return UserDTO.toUserDTO(userRepository.save(UserDTO.toUser(userDTO)));
     }
@@ -42,9 +39,18 @@ public class UserService {
         entity.setName(userDTO.getName());
         entity.setSurname(userDTO.getSurname());
         entity.setPhoneNumber(userDTO.getPhoneNumber());
-        entity.setSpots(userDTO.getSpots());
-        entity.setCars(userDTO.getCars());
-        entity.setParkings(userDTO.getParkings());
+        entity.setSpots(userDTO.getSpotDTOs()
+                .stream()
+                .map(SpotDTO::toSpot)
+                .collect(Collectors.toList()));
+        entity.setCars(userDTO.getCarDTOs()
+                .stream()
+                .map(CarDTO::toCar)
+                .collect(Collectors.toList()));
+        entity.setParkings(userDTO.getParkingDTOs()
+                .stream()
+                .map(ParkingDTO::toParking)
+                .collect(Collectors.toList()));
         return UserDTO.toUserDTO(userRepository.save(entity));
     }
 

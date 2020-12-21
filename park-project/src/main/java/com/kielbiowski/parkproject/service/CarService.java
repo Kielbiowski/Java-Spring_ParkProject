@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
 
 @Service
-public class CarService {
+public class CarService implements ServiceInterface<CarDTO> {
     private final CarRepository carRepository;
 
     @Autowired
@@ -18,14 +18,17 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+    @Override
     public CarDTO findById(Integer id) {
         return CarDTO.toCarDTO(carRepository.findById(id).orElseThrow(NotFoundException::new));
     }
 
+    @Override
     public CarDTO create(CarDTO carDTO) {
         return CarDTO.toCarDTO(carRepository.save(CarDTO.toCar(carDTO)));
     }
 
+    @Override
     public CarDTO update(CarDTO carDTO) {
         Car entity = carRepository.findById(carDTO.getId()).orElseThrow(NotFoundException::new);
         entity.setUser(UserDTO.toUser(carDTO.getUserDTO()));
@@ -46,6 +49,7 @@ public class CarService {
         return CarDTO.toCarDTO(carRepository.save(entity));
     }
 
+    @Override
     public void delete(Integer id) {
         carRepository.delete(carRepository.findById(id).orElseThrow(NotFoundException::new));
     }

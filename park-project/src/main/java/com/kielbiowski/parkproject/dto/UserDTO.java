@@ -7,8 +7,11 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Data
@@ -46,16 +49,17 @@ public class UserDTO {
                 userDTO.getName(),
                 userDTO.getSurname(),
                 userDTO.getPhoneNumber(),
-                userDTO.getSpotDTOs()
-                        .stream()
+                //Null-safe streams done with Java 9' Stream.ofNullable
+                Stream.ofNullable(userDTO.getSpotDTOs())
+                        .flatMap(Collection::stream)
                         .map(SpotDTO::toSpot)
                         .collect(Collectors.toList()),
-                userDTO.getCarDTOs()
-                        .stream()
+                Stream.ofNullable(userDTO.getCarDTOs())
+                        .flatMap(Collection::stream)
                         .map(CarDTO::toCar)
                         .collect(Collectors.toList()),
-                userDTO.getParkingDTOs()
-                        .stream()
+                Stream.ofNullable(userDTO.getParkingDTOs())
+                        .flatMap(Collection::stream)
                         .map(ParkingDTO::toParking)
                         .collect(Collectors.toList()));
     }
@@ -69,16 +73,20 @@ public class UserDTO {
                 user.getName(),
                 user.getSurname(),
                 user.getPhoneNumber(),
-                user.getSpots()
+                //Null-safe streams done with Java 8' Optionals
+                Optional.ofNullable(user.getSpots())
                         .stream()
+                        .flatMap(Collection::stream)
                         .map(SpotDTO::toSpotDTO)
                         .collect(Collectors.toList()),
-                user.getCars()
+                Optional.ofNullable(user.getCars())
                         .stream()
+                        .flatMap(Collection::stream)
                         .map(CarDTO::toCarDTO)
                         .collect(Collectors.toList()),
-                user.getParkings()
+                Optional.ofNullable(user.getParkings())
                         .stream()
+                        .flatMap(Collection::stream)
                         .map(ParkingDTO::toParkingDTO)
                         .collect(Collectors.toList()));
     }

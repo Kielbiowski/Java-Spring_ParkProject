@@ -7,7 +7,10 @@ import com.kielbiowski.parkproject.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CarService implements ServiceInterface<CarDTO> {
@@ -38,12 +41,15 @@ public class CarService implements ServiceInterface<CarDTO> {
         entity.setBrand(carDTO.getBrand());
         entity.setModel(carDTO.getModel());
         entity.setSize(carDTO.getSize());
-        entity.setRequests(carDTO.getRequestDTOs()
-                .stream()
+        //Null-safe streams done with Java 9' Stream.ofNullable
+        entity.setRequests(Stream.ofNullable(carDTO.getRequestDTOs())
+                .flatMap(Collection::stream)
                 .map(RequestDTO::toRequest)
                 .collect(Collectors.toList()));
-        entity.setTransactions(carDTO.getTransactionDTOs()
+        //Null-safe streams done with Java 8' Optionals
+        entity.setTransactions(Optional.ofNullable(carDTO.getTransactionDTOs())
                 .stream()
+                .flatMap(Collection::stream)
                 .map(TransactionDTO::toTransaction)
                 .collect(Collectors.toList()));
         return CarDTO.toCarDTO(carRepository.save(entity));

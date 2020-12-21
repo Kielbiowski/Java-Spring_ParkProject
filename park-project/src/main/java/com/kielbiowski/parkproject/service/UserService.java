@@ -10,7 +10,10 @@ import com.kielbiowski.parkproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserService implements ServiceInterface<UserDTO> {
@@ -41,16 +44,20 @@ public class UserService implements ServiceInterface<UserDTO> {
         entity.setName(userDTO.getName());
         entity.setSurname(userDTO.getSurname());
         entity.setPhoneNumber(userDTO.getPhoneNumber());
-        entity.setSpots(userDTO.getSpotDTOs()
-                .stream()
+        //Null-safe stream done with Java 9' Stream.ofNullable
+        entity.setSpots(Stream.ofNullable(userDTO.getSpotDTOs())
+                .flatMap(Collection::stream)
                 .map(SpotDTO::toSpot)
                 .collect(Collectors.toList()));
-        entity.setCars(userDTO.getCarDTOs()
+        //Null-safe streams done with Java 8' Optionals
+        entity.setCars(Optional.ofNullable(userDTO.getCarDTOs())
                 .stream()
+                .flatMap(Collection::stream)
                 .map(CarDTO::toCar)
                 .collect(Collectors.toList()));
-        entity.setParkings(userDTO.getParkingDTOs()
+        entity.setParkings(Optional.ofNullable(userDTO.getParkingDTOs())
                 .stream()
+                .flatMap(Collection::stream)
                 .map(ParkingDTO::toParking)
                 .collect(Collectors.toList()));
         return UserDTO.toUserDTO(userRepository.save(entity));

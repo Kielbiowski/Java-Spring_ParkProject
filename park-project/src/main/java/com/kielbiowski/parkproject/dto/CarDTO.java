@@ -6,8 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,12 +43,13 @@ public class CarDTO {
                 carDTO.getBrand(),
                 carDTO.getModel(),
                 carDTO.getSize(),
-                carDTO.getRequestDTOs()
-                        .stream()
+                //Null-safe streams done with Java 9' Stream.ofNullable
+                Stream.ofNullable(carDTO.getRequestDTOs())
+                        .flatMap(Collection::stream)
                         .map(RequestDTO::toRequest)
                         .collect(Collectors.toList()),
-                carDTO.getTransactionDTOs()
-                        .stream()
+                Stream.ofNullable(carDTO.getTransactionDTOs())
+                        .flatMap(Collection::stream)
                         .map(TransactionDTO::toTransaction)
                         .collect(Collectors.toList()));
     }
@@ -60,12 +64,15 @@ public class CarDTO {
                 car.getBrand(),
                 car.getModel(),
                 car.getSize(),
-                car.getRequests()
+                //Null-safe streams done with Java 8' Optionals
+                Optional.ofNullable(car.getRequests())
                         .stream()
+                        .flatMap(Collection::stream)
                         .map(RequestDTO::toRequestDTO)
                         .collect(Collectors.toList()),
-                car.getTransactions()
+                Optional.ofNullable(car.getTransactions())
                         .stream()
+                        .flatMap(Collection::stream)
                         .map(TransactionDTO::toTransactionDTO)
                         .collect(Collectors.toList()));
     }

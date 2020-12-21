@@ -6,7 +6,10 @@ import com.kielbiowski.parkproject.model.Spot;
 import com.kielbiowski.parkproject.repository.SpotRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class SpotService implements ServiceInterface<SpotDTO> {
@@ -35,12 +38,15 @@ public class SpotService implements ServiceInterface<SpotDTO> {
         entity.setNumber(spotDTO.getNumber());
         entity.setSize(spotDTO.getSize());
         entity.setCar(CarDTO.toCar(spotDTO.getCarDTO()));
-        entity.setOffers(spotDTO.getOfferDTOs()
-                .stream()
+        //Null-safe stream done with Java 9' Stream.ofNullable
+        entity.setOffers(Stream.ofNullable(spotDTO.getOfferDTOs())
+                .flatMap(Collection::stream)
                 .map(OfferDTO::toOffer)
                 .collect(Collectors.toList()));
-        entity.setTransactions(spotDTO.getTransactionDTOs()
+        //Null-safe streams done with Java 8' Optionals
+        entity.setTransactions(Optional.ofNullable(spotDTO.getTransactionDTOs())
                 .stream()
+                .flatMap(Collection::stream)
                 .map(TransactionDTO::toTransaction)
                 .collect(Collectors.toList()));
         return SpotDTO.toSpotDTO(spotRepository.save(entity));

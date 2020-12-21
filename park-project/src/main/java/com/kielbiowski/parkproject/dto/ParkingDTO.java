@@ -6,8 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -46,8 +49,9 @@ public class ParkingDTO {
                 parkingDTO.getStreetNumber(),
                 parkingDTO.getPricePerHour(),
                 parkingDTO.getAdminAcceptance(),
-                parkingDTO.getSpotDTOs()
-                        .stream()
+                //Null-safe stream done with Java 9' Stream.ofNullable
+                Stream.ofNullable(parkingDTO.getSpotDTOs())
+                        .flatMap(Collection::stream)
                         .map(SpotDTO::toSpot)
                         .collect(Collectors.toList()));
     }
@@ -62,8 +66,10 @@ public class ParkingDTO {
                 parking.getStreetNumber(),
                 parking.getPricePerHour(),
                 parking.getAdminAcceptance(),
-                parking.getSpots()
+                //Null-safe stream done with Java 8' Optionals
+                Optional.ofNullable(parking.getSpots())
                         .stream()
+                        .flatMap(Collection::stream)
                         .map(SpotDTO::toSpotDTO)
                         .collect(Collectors.toList()));
     }

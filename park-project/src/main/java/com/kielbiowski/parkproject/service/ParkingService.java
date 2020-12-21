@@ -5,13 +5,17 @@ import com.kielbiowski.parkproject.dto.SpotDTO;
 import com.kielbiowski.parkproject.exception.NotFoundException;
 import com.kielbiowski.parkproject.model.Parking;
 import com.kielbiowski.parkproject.repository.ParkingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
+@Service
 public class ParkingService implements ServiceInterface<ParkingDTO> {
 
     private final ParkingRepository parkingRepository;
 
+    @Autowired
     public ParkingService(ParkingRepository parkingRepository) {
         this.parkingRepository = parkingRepository;
     }

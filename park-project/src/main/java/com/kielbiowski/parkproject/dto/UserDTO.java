@@ -20,7 +20,7 @@ public class UserDTO {
     private String email;
 
     @NotNull
-    @Length(min = 8,message = "Password must be at least 8 characters long!")
+    @Length(min = 8, message = "Password must be at least 8 characters long!")
     private String password;
 
     @NotNull

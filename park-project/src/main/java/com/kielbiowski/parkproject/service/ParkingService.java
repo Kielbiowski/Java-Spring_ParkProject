@@ -8,7 +8,9 @@ import com.kielbiowski.parkproject.repository.ParkingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ParkingService implements ServiceInterface<ParkingDTO> {
@@ -40,8 +42,9 @@ public class ParkingService implements ServiceInterface<ParkingDTO> {
         entity.setStreetNumber(parkingDTO.getStreetNumber());
         entity.setPricePerHour(parkingDTO.getPricePerHour());
         entity.setAdminAcceptance(parkingDTO.getAdminAcceptance());
-        entity.setSpots(parkingDTO.getSpotDTOs()
-                .stream()
+        //Null-safe stream done with Java 9' Stream.ofNullable
+        entity.setSpots(Stream.ofNullable(parkingDTO.getSpotDTOs())
+                .flatMap(Collection::stream)
                 .map(SpotDTO::toSpot)
                 .collect(Collectors.toList()));
         return ParkingDTO.toParkingDTO(parkingRepository.save(entity));

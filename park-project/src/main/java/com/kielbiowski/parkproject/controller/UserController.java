@@ -45,4 +45,5 @@ public class UserController {
         model.addAttribute("userDTO", userService.findById(mockId));
         return "user";
     }
+
 }

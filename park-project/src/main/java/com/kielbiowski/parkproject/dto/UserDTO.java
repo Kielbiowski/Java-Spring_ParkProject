@@ -3,7 +3,6 @@ package com.kielbiowski.parkproject.dto;
 import com.kielbiowski.parkproject.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -19,11 +18,10 @@ public class UserDTO {
     private Integer id;
 
     @NotNull
-    @Email(message = "Provide valid email address!")
+    @Email(message = "Provide valid email address.")
     private String email;
 
     @NotNull
-    @Length(min = 8, message = "Password must be at least 8 characters long!")
     private String password;
 
     private String passwordConfirm;

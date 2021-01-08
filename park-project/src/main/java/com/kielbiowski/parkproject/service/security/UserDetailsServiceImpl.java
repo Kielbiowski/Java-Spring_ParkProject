@@ -1,4 +1,4 @@
-package com.kielbiowski.parkproject.service;
+package com.kielbiowski.parkproject.service.security;
 
 import com.kielbiowski.parkproject.exception.NotFoundException;
 import com.kielbiowski.parkproject.model.Role;

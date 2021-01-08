@@ -1,4 +1,4 @@
-package com.kielbiowski.parkproject.service;
+package com.kielbiowski.parkproject.service.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,10 +1,11 @@
-package com.kielbiowski.parkproject.service;
+package com.kielbiowski.parkproject.service.model;
 
 import com.kielbiowski.parkproject.dto.OfferDTO;
 import com.kielbiowski.parkproject.dto.SpotDTO;
 import com.kielbiowski.parkproject.exception.NotFoundException;
 import com.kielbiowski.parkproject.model.Offer;
 import com.kielbiowski.parkproject.repository.OfferRepository;
+import com.kielbiowski.parkproject.service.security.ServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.kielbiowski.parkproject.controller;
 
 import com.kielbiowski.parkproject.dto.UserDTO;
-import com.kielbiowski.parkproject.service.UserService;
+import com.kielbiowski.parkproject.service.model.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

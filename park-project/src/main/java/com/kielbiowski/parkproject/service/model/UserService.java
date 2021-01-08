@@ -1,10 +1,11 @@
-package com.kielbiowski.parkproject.service;
+package com.kielbiowski.parkproject.service.model;
 
 import com.kielbiowski.parkproject.dto.*;
 import com.kielbiowski.parkproject.exception.NotFoundException;
 import com.kielbiowski.parkproject.model.User;
 import com.kielbiowski.parkproject.repository.RoleRepository;
 import com.kielbiowski.parkproject.repository.UserRepository;
+import com.kielbiowski.parkproject.service.security.ServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

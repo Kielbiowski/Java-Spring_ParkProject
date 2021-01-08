@@ -2,15 +2,13 @@ package com.kielbiowski.parkproject.controller;
 
 import com.kielbiowski.parkproject.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.kielbiowski.parkproject.service.UserService;
+import com.kielbiowski.parkproject.service.model.UserService;
 
 import javax.validation.Valid;
-import java.awt.*;
 
 @Controller
 public class UserController {

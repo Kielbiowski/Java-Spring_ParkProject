@@ -1,4 +1,4 @@
-package com.kielbiowski.parkproject.service;
+package com.kielbiowski.parkproject.service.security;
 
 public interface SecurityServiceInterface {
     String findLoggedInUsername();

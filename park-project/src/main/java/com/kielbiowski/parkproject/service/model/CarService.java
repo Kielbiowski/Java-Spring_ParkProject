@@ -1,9 +1,10 @@
-package com.kielbiowski.parkproject.service;
+package com.kielbiowski.parkproject.service.model;
 
 import com.kielbiowski.parkproject.dto.*;
 import com.kielbiowski.parkproject.exception.NotFoundException;
 import com.kielbiowski.parkproject.model.Car;
 import com.kielbiowski.parkproject.repository.CarRepository;
+import com.kielbiowski.parkproject.service.security.ServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

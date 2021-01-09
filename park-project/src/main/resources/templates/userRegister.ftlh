@@ -18,7 +18,7 @@
     Your email is: ${userDTO.email}
 <#else>
     <h1>Register</h1>
-    <form action="/register" method="post">
+    <form action="/register" method="POST">
         Email:<br>
         <@spring.formInput "userDTO.email"/>
         <@spring.showErrors "<br>"/>
@@ -28,7 +28,7 @@
         <@spring.showErrors "<br>"/>
         <br><br>
         Confirm password:<br>
-        <@spring.formPasswordInput "userDTO.confirmPassword"/>
+        <@spring.formPasswordInput "userDTO.passwordConfirm"/>
         <@spring.showErrors "<br>"/>
         <br><br>
         <input type="submit" name="save" value="Register!">

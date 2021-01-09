@@ -1,16 +1,16 @@
 package com.kielbiowski.parkproject.controller;
 
 import com.kielbiowski.parkproject.dto.UserDTO;
+import com.kielbiowski.parkproject.service.model.UserService;
 import com.kielbiowski.parkproject.service.security.SecurityService;
 import com.kielbiowski.parkproject.validation.UserDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import com.kielbiowski.parkproject.service.model.UserService;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {

@@ -16,17 +16,21 @@
 <#if message??>
     <h1>${message}</h1>
 <#else>
-    <h1>Login</h1>
+    <h1>Login</h1><br>
+    <#if error??>
+        ${error}
+        <br><br>
+    </#if>
     <form action="/login" method="post">
         Email:<br>
-        <@spring.formInput "userDTO.email"/>
-        <@spring.showErrors "<br>"/>
+        <input name="username" type="text"/>
         <br><br>
+
         Password:<br>
-        <@spring.formPasswordInput "userDTO.password"/>
-        <@spring.showErrors "<br>"/>
+        <input name="password" type="password"/>
         <br><br>
-        ${error}
+
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         <input type="submit" name="login" value="Login!">
     </form>
 </#if>

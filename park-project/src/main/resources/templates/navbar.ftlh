@@ -1,4 +1,4 @@
-<#if pageContext.request.userPrincipal.name??>
+<#if pageContext?? && pageContext.request.userPrincipal.name??>
 <#--<#if userDTO??&&userDTO.id??>-->
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <!-- Logo -->

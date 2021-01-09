@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Register</title>
+    <title>Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -13,12 +13,11 @@
 <body>
 <#include "navbar.ftlh">
 
-<#if success??>
-    <h1>Account registered successfully!</h1>
-    Your email is: ${userDTO.email}
+<#if message??>
+    <h1>${message}</h1>
 <#else>
-    <h1>Register</h1>
-    <form action="/register" method="post">
+    <h1>Login</h1>
+    <form action="/login" method="post">
         Email:<br>
         <@spring.formInput "userDTO.email"/>
         <@spring.showErrors "<br>"/>
@@ -27,11 +26,8 @@
         <@spring.formPasswordInput "userDTO.password"/>
         <@spring.showErrors "<br>"/>
         <br><br>
-        Confirm password:<br>
-        <@spring.formPasswordInput "userDTO.confirmPassword"/>
-        <@spring.showErrors "<br>"/>
-        <br><br>
-        <input type="submit" name="save" value="Register!">
+        ${error}
+        <input type="submit" name="login" value="Login!">
     </form>
 </#if>
 

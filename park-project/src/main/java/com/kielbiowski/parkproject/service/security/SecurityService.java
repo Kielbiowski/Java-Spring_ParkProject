@@ -8,17 +8,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SecurityService implements SecurityServiceInterface {
 
-    private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final AuthenticationManager authenticationManager;
     private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
     @Autowired
-    public SecurityService(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
-        this.authenticationManager = authenticationManager;
+    public SecurityService(UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
         this.userDetailsService = userDetailsService;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class SecurityService implements SecurityServiceInterface {
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         if(usernamePasswordAuthenticationToken.isAuthenticated()){
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            logger.debug(String.format("Auto login %s succesfully!"),username);
+            logger.debug(String.format("Auto login %s succesfully!",username));
         }
     }
 }

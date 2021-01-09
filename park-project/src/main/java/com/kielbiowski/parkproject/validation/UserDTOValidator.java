@@ -2,14 +2,18 @@ package com.kielbiowski.parkproject.validation;
 
 import com.kielbiowski.parkproject.dto.UserDTO;
 import com.kielbiowski.parkproject.service.model.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+@Component
 public class UserDTOValidator implements Validator {
 
     private final UserService userService;
 
+    @Autowired
     public UserDTOValidator(UserService userService) {
         this.userService = userService;
     }

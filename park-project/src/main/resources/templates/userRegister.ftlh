@@ -20,17 +20,19 @@
     <h1>Register</h1>
     <form action="/register" method="POST">
         Email:<br>
-        <@spring.formInput "userDTO.email"/>
-        <@spring.showErrors "<br>"/>
-        <br><br>
+        <@spring.formInput "userDTO.email"/><br>
+        <@spring.showErrors "<br>"/><br><br>
+
         Password:<br>
-        <@spring.formPasswordInput "userDTO.password"/>
-        <@spring.showErrors "<br>"/>
-        <br><br>
+        <@spring.formPasswordInput "userDTO.password"/><br>
+        <@spring.showErrors "<br>"/><br><br>
+
         Confirm password:<br>
-        <@spring.formPasswordInput "userDTO.passwordConfirm"/>
-        <@spring.showErrors "<br>"/>
-        <br><br>
+        <@spring.formPasswordInput "userDTO.passwordConfirm"/><br>
+        <@spring.showErrors "<br>"/><br><br>
+
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
         <input type="submit" name="save" value="Register!">
     </form>
 </#if>

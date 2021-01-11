@@ -35,6 +35,8 @@ public class UserService implements ServiceInterface<UserDTO> {
     }
 
     public UserDTO findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user==null) return null;
         return UserDTO.toUserDTO(userRepository.findByEmail(email));
     }
 

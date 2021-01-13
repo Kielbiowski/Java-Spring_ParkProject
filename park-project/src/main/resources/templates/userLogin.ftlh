@@ -49,9 +49,8 @@
                         </div>
                     </#if>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                    <div class="col-md-12 text-center ">
+                    <div class="col-md-12 text-center mb-3">
                         <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Login</button>
-                        <br>
                     </div>
                     <div class="form-group">
                         <p class="text-center">Don't have account? <a href="/register" id="signup">Sign up here</a></p>

@@ -1,9 +1,8 @@
-<#if pageContext?? && pageContext.request.userPrincipal.name??>
-<#--<#if userDTO??&&userDTO.id??>-->
+<#if userDTO??&&userDTO.id??>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <!-- Logo -->
         <a class="navbar-brand" href="/?id=${userDTO.id}">
-            <img src="/images/ParkProjectLogo.png" alt="ParkProject" style="width:30px;"> ParkProject
+            <img src="/images/logo.png" alt="Logo" style="width:30px;"> ParkProject
         </a>
         <!-- Links -->
         <ul class="navbar-nav ml-auto">
@@ -28,7 +27,7 @@
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <!-- Logo -->
         <a class="navbar-brand" href="/">
-            <img src="/images/ParkProjectLogo.png" alt="ParkProject" style="width:30px;"> ParkProject
+            <img src="/images/logo.png" alt="Logo" style="width:30px;"> ParkProject
         </a>
         <!-- Links -->
         <ul class="navbar-nav ml-auto">

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,17 +38,18 @@ public class UserService implements ServiceInterface<UserDTO> {
     public UserDTO findByEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user==null) return null;
-        return UserDTO.toUserDTO(userRepository.findByEmail(email));
+        return UserDTO.toUserDTO(user);
     }
 
     @Override
     public UserDTO create(UserDTO userDTO) {
         userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         //Null-safe stream done with Java 9' Stream.ofNullable
-        userDTO.setRoleDTOs(Stream.ofNullable(roleRepository.findAll())
+        userDTO.setRoleDTOs(List.of(RoleDTO.toRoleDTO(roleRepository.findById(2).orElseThrow(NotFoundException::new))));
+        /*userDTO.setRoleDTOs(Stream.ofNullable(roleRepository.findAll())
                 .flatMap(Collection::stream)
                 .map(RoleDTO::toRoleDTO)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList()));*/
         return UserDTO.toUserDTO(userRepository.save(UserDTO.toUser(userDTO)));
     }
 

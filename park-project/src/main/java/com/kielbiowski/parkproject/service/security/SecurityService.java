@@ -3,6 +3,7 @@ package com.kielbiowski.parkproject.service.security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +19,7 @@ public class SecurityService implements SecurityServiceInterface {
     private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
     @Autowired
-    public SecurityService(UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
+    public SecurityService(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
         this.userDetailsService = userDetailsService;
         this.authenticationManager = authenticationManager;
     }
@@ -28,8 +29,11 @@ public class SecurityService implements SecurityServiceInterface {
         Object userDetails = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
-                .getDetails();
-        if (userDetails instanceof UserDetails) return ((UserDetails) userDetails).getUsername();
+                .getPrincipal();
+        if (userDetails instanceof UserDetails){
+            System.out.println("logged in");
+            return ((UserDetails) userDetails).getUsername();
+        };
         return null;
     }
 
@@ -38,9 +42,9 @@ public class SecurityService implements SecurityServiceInterface {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        if(usernamePasswordAuthenticationToken.isAuthenticated()){
+        if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            logger.debug(String.format("Auto login %s succesfully!",username));
+            logger.debug(String.format("Auto login %s succesfully!", username));
         }
     }
 }

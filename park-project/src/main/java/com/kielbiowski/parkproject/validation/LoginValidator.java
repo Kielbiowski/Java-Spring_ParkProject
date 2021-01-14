@@ -10,12 +10,12 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Component
-public class UserDTOValidator implements Validator {
+public class LoginValidator implements Validator {
 
     private final UserService userService;
 
     @Autowired
-    public UserDTOValidator(UserService userService) {
+    public LoginValidator(UserService userService) {
         this.userService = userService;
     }
 

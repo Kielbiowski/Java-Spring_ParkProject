@@ -13,9 +13,7 @@
 <body>
 <#include "navbar.ftlh">
 <#if success??>
-    <div class="alert alert-primary" role="alert">
-        Account registered successfully!
-    </div>
+    <div class="alert alert-dark" role="alert">Account registered successfully!</div>
 </#if>
 <div class="container">
     <div class="row">
@@ -33,21 +31,36 @@
                 <form action="/register" method="post">
                     <div class="form-group">
                         <label for="email1">Email address</label><br>
-                        <@spring.formInput "userDTO.email"/><br>
-                        <@spring.showErrors "<br>"/><br><br>
-<#--                        <input type="email" name="email" class="form-control" id="email1" aria-describedby="emailHelp1" placeholder="Enter email">-->
+                        <@spring.bind "userDTO.email"/>
+                        <input type="text" name="email" class="form-control" id="email1" aria-describedby="emailHelp1"
+                               placeholder="Enter email">
+                        <div id="emailHelp1" class="form-text">
+                            <#list spring.status.errorMessages as error>
+                                <div class="alert alert-warning" role="alert">${error}</div>
+                            </#list>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="password1">Password</label><br>
-                        <@spring.formPasswordInput "userDTO.password"/><br>
-                        <@spring.showErrors "<br>"/><br><br>
-<#--                        <input type="password" name="password" id="password1" class="form-control" aria-describedby="passwordHelp1" placeholder="Enter Password">-->
+                        <@spring.bind "userDTO.password"/>
+                        <input type="password" name="password" id="password1" class="form-control"
+                               aria-describedby="passwordHelp1" placeholder="Enter Password">
+                        <div id="passwordHelp1" class="form-text">
+                            <#list spring.status.errorMessages as error>
+                                <div class="alert alert-warning" role="alert">${error}</div>
+                            </#list>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="password2">Confirm password</label><br>
-                        <@spring.formPasswordInput "userDTO.passwordConfirm"/><br>
-                        <@spring.showErrors "<br>"/><br><br>
-<#--                        <input type="password" name="password" id="password2" class="form-control" aria-describedby="passwordHelp2" placeholder="Enter Password">-->
+                        <@spring.bind "userDTO.passwordConfirm"/>
+                        <input type="password" name="passwordConfirm" id="password2" class="form-control"
+                               aria-describedby="passwordHelp2" placeholder="Confirm password">
+                        <div id="passwordHelp2" class="form-text">
+                            <#list spring.status.errorMessages as error>
+                                <div class="alert alert-warning" role="alert">${error}</div>
+                            </#list>
+                        </div>
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="col-md-12 text-center mb-3">

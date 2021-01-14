@@ -30,13 +30,19 @@ public class UserDTOValidator implements Validator {
 
         //email validation
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty");
-        if (!EmailValidator.getInstance().isValid(userDTO.getEmail())) errors.rejectValue("email", "Email.format");
-        if (userService.findByEmail(userDTO.getEmail()) != null) errors.rejectValue("email", "Email.duplicate");
+        if (!errors.hasFieldErrors("email")) {
+            if (!EmailValidator.getInstance().isValid(userDTO.getEmail())) errors.rejectValue("email", "Email.format");
+            else if (userService.findByEmail(userDTO.getEmail()) != null) errors.rejectValue("email", "Email.duplicate");
+        }
 
         //password validation
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
-        if(userDTO.getPassword().length()<8||userDTO.getPassword().length()>32) errors.rejectValue("password","Password.size");
+        if (!errors.hasFieldErrors("password") && (userDTO.getPassword().length() < 8 || userDTO.getPassword().length() > 32))
+            errors.rejectValue("password", "Password.size");
+
+        //passwordConfirm validation
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "NotEmpty");
-        if(!userDTO.getPassword().equals(userDTO.getPasswordConfirm())) errors.rejectValue("passwordConfirm","Password.diff");
+        if (!errors.hasFieldErrors("passwordConfirm") && !userDTO.getPassword().equals(userDTO.getPasswordConfirm()))
+            errors.rejectValue("passwordConfirm", "Password.diff");
     }
 }

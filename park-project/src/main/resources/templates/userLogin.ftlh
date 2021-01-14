@@ -13,7 +13,7 @@
 <body>
 <#include "navbar.ftlh">
 <#if logout??>
-    <div class="alert alert-primary" role="alert">
+    <div class="alert alert-dark" role="alert">
         ${logout}
     </div>
 </#if>
@@ -38,8 +38,7 @@
                     </div>
                     <div class="form-group">
                         <label for="password1">Password</label>
-                        <input type="password" name="password" id="password1" class="form-control"
-                               placeholder="Enter Password">
+                        <input type="password" name="password" id="password1" class="form-control" placeholder="Enter Password">
                     </div>
                     <#if error??>
                         <div class="form-group">

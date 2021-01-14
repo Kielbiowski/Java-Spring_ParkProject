@@ -1,9 +1,10 @@
-package com.kielbiowski.parkproject.service;
+package com.kielbiowski.parkproject.service.model;
 
 import com.kielbiowski.parkproject.dto.*;
 import com.kielbiowski.parkproject.exception.NotFoundException;
 import com.kielbiowski.parkproject.model.Spot;
 import com.kielbiowski.parkproject.repository.SpotRepository;
+import com.kielbiowski.parkproject.service.security.ServiceInterface;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

@@ -23,6 +23,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Transient
+    private String passwordConfirm;
+
     @Column(nullable = false)
     private Integer accountBalance;
 
@@ -46,4 +49,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "parking_id"))
     private List<Parking> parkings;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
 }

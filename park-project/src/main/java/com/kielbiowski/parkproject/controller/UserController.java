@@ -1,24 +1,28 @@
 package com.kielbiowski.parkproject.controller;
 
 import com.kielbiowski.parkproject.dto.UserDTO;
+import com.kielbiowski.parkproject.service.model.UserService;
+import com.kielbiowski.parkproject.service.security.SecurityService;
+import com.kielbiowski.parkproject.validation.UserDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import com.kielbiowski.parkproject.service.UserService;
-
-import javax.validation.Valid;
-import java.awt.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class UserController {
     private final UserService userService;
+    private final SecurityService securityService;
+    private final UserDTOValidator userDTOValidator;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, SecurityService securityService, UserDTOValidator userDTOValidator) {
         this.userService = userService;
+        this.securityService = securityService;
+        this.userDTOValidator = userDTOValidator;
     }
 
     @GetMapping(path = "/register")
@@ -28,21 +32,28 @@ public class UserController {
     }
 
     @PostMapping(path = "/register")
-    public String registerPost(Model model, @Valid UserDTO userDTO, BindingResult bindingResult) {
-        if (!bindingResult.hasErrors()
-                && !userDTO.getEmail().isEmpty()
-                && !userDTO.getPassword().isEmpty()
-                && userDTO.getAccountBalance().equals(0)) {
-            userService.create(userDTO);
-            model.addAttribute("success", true);
-        }
+    public String registerPost(Model model, UserDTO userDTO, BindingResult bindingResult) {
+        userDTOValidator.validate(userDTO, bindingResult);
+        if (bindingResult.hasErrors()) return "userRegister";
+
+        userService.create(userDTO);
+        model.addAttribute("success", true);
         model.addAttribute("userDTO", userDTO);
+        securityService.autoLogin(userDTO.getEmail(), userDTO.getPasswordConfirm());
         return "userRegister";
     }
 
+    @GetMapping(path = "/login")
+    public String loginGet(Model model, String error, String logout) {
+        if (error != null) model.addAttribute("error", "Your username or password is invalid.");
+        if (logout != null) model.addAttribute("logout", "You have been logged out successfully.");
+        return "userLogin";
+    }
+
     @GetMapping(path = "/user")
-    public String userGet(Model model, @RequestParam(name = "id", required = true) Integer mockId) {
-        model.addAttribute("userDTO", userService.findById(mockId));
+    public String userGet(Model model) {
+        UserDTO userDTO = userService.findByEmail(securityService.findLoggedInUsername());
+        model.addAttribute("userDTO", userDTO);
         return "user";
     }
 

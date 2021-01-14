@@ -1,4 +1,4 @@
-package com.kielbiowski.parkproject.service;
+package com.kielbiowski.parkproject.service.model;
 
 import com.kielbiowski.parkproject.dto.CarDTO;
 import com.kielbiowski.parkproject.dto.SpotDTO;
@@ -6,6 +6,7 @@ import com.kielbiowski.parkproject.dto.TransactionDTO;
 import com.kielbiowski.parkproject.exception.NotFoundException;
 import com.kielbiowski.parkproject.model.Transaction;
 import com.kielbiowski.parkproject.repository.TransactionRepository;
+import com.kielbiowski.parkproject.service.security.ServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

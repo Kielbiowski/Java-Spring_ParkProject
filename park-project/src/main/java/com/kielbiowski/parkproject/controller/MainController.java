@@ -20,7 +20,7 @@ public class MainController {
     }
 
     @GetMapping(path = {"/index", "/", ""})
-    public String indexGet(Model model, @RequestParam(name = "id", required = false) Integer mockId) {
+    public String indexGet(Model model) {
         UserDTO userDTO = null;
         String email = securityService.findLoggedInUsername();
         if (email != null) {

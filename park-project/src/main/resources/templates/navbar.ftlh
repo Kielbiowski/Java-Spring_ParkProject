@@ -1,7 +1,7 @@
 <#if userDTO??&&userDTO.id??>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <!-- Logo -->
-        <a class="navbar-brand" href="/?id=${userDTO.id}">
+        <a class="navbar-brand" href="/">
             <img src="/images/logo.png" alt="Logo" style="width:30px;"> ParkProject
         </a>
         <!-- Links -->
@@ -13,7 +13,7 @@
                 <a class="nav-link disabled" href="#">Spots</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="/user?id=${userDTO.id}">User</a>
+                <a class="nav-link" href="/user">User</a>
             </li>
             <form id="logoutForm" method="post" action="/logout">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

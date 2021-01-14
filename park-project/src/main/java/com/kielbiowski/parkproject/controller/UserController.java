@@ -51,8 +51,9 @@ public class UserController {
     }
 
     @GetMapping(path = "/user")
-    public String userGet(Model model, @RequestParam(name = "id", required = true) Integer mockId) {
-        model.addAttribute("userDTO", userService.findById(mockId));
+    public String userGet(Model model) {
+        UserDTO userDTO = userService.findByEmail(securityService.findLoggedInUsername());
+        model.addAttribute("userDTO", userDTO);
         return "user";
     }
 

@@ -3,7 +3,6 @@ package com.kielbiowski.parkproject.dto;
 import com.kielbiowski.parkproject.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -19,12 +18,13 @@ public class UserDTO {
     private Integer id;
 
     @NotNull
-    @Email(message = "Provide valid email address!")
+    @Email(message = "Provide valid email address.")
     private String email;
 
     @NotNull
-    @Length(min = 8, message = "Password must be at least 8 characters long!")
     private String password;
+
+    private String passwordConfirm;
 
     @NotNull
     private Integer accountBalance;
@@ -35,6 +35,7 @@ public class UserDTO {
     private List<SpotDTO> spotDTOs;
     private List<CarDTO> carDTOs;
     private List<ParkingDTO> parkingDTOs;
+    private List<RoleDTO> roleDTOs;
 
     public UserDTO() {
         this.accountBalance = 0;
@@ -45,6 +46,7 @@ public class UserDTO {
                 userDTO.getId(),
                 userDTO.getEmail(),
                 userDTO.getPassword(),
+                userDTO.getPasswordConfirm(),
                 userDTO.getAccountBalance(),
                 userDTO.getName(),
                 userDTO.getSurname(),
@@ -61,6 +63,10 @@ public class UserDTO {
                 Stream.ofNullable(userDTO.getParkingDTOs())
                         .flatMap(Collection::stream)
                         .map(ParkingDTO::toParking)
+                        .collect(Collectors.toList()),
+                Stream.ofNullable(userDTO.getRoleDTOs())
+                        .flatMap(Collection::stream)
+                        .map(RoleDTO::toRole)
                         .collect(Collectors.toList()));
     }
 
@@ -69,6 +75,7 @@ public class UserDTO {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getPasswordConfirm(),
                 user.getAccountBalance(),
                 user.getName(),
                 user.getSurname(),
@@ -88,6 +95,11 @@ public class UserDTO {
                         .stream()
                         .flatMap(Collection::stream)
                         .map(ParkingDTO::toParkingDTO)
+                        .collect(Collectors.toList()),
+                Optional.ofNullable(user.getRoles())
+                        .stream()
+                        .flatMap(Collection::stream)
+                        .map(RoleDTO::toRoleDTO)
                         .collect(Collectors.toList()));
     }
 }

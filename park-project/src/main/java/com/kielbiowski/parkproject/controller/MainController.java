@@ -3,8 +3,10 @@ package com.kielbiowski.parkproject.controller;
 import com.kielbiowski.parkproject.dto.UserDTO;
 import com.kielbiowski.parkproject.service.model.UserService;
 import com.kielbiowski.parkproject.service.security.SecurityService;
-import com.kielbiowski.parkproject.validation.LoginValidator;
+import com.kielbiowski.parkproject.validation.RegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,13 +18,13 @@ public class MainController {
 
     private final UserService userService;
     private final SecurityService securityService;
-    private final LoginValidator loginValidator;
+    private final RegistrationValidator registrationValidator;
 
     @Autowired
-    public MainController(UserService userService, SecurityService securityService, LoginValidator loginValidator) {
+    public MainController(UserService userService, SecurityService securityService, RegistrationValidator registrationValidator) {
         this.userService = userService;
         this.securityService = securityService;
-        this.loginValidator = loginValidator;
+        this.registrationValidator = registrationValidator;
     }
 
     @GetMapping(path = {"/index", "/", ""})
@@ -44,14 +46,14 @@ public class MainController {
 
     @PostMapping(path = "/register")
     public String registerPost(Model model, UserDTO userDTO, BindingResult bindingResult) {
-        loginValidator.validate(userDTO, bindingResult);
+        registrationValidator.validate(userDTO, bindingResult);
         if (bindingResult.hasErrors()) return "register";
 
-        userService.create(userDTO);
-        model.addAttribute("success", true);
+        userDTO = userService.create(userDTO);
+        model.addAttribute("registration", true);
         model.addAttribute("userDTO", userDTO);
         securityService.autoLogin(userDTO.getEmail(), userDTO.getPasswordConfirm());
-        return "register";
+        return "userDetails";
     }
 
     @GetMapping(path = "/login")

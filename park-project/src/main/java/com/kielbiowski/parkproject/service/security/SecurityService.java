@@ -1,7 +1,5 @@
 package com.kielbiowski.parkproject.service.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +14,6 @@ public class SecurityService implements SecurityServiceInterface {
 
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
-    private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
     @Autowired
     public SecurityService(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService, AuthenticationManager authenticationManager) {
@@ -30,10 +27,7 @@ public class SecurityService implements SecurityServiceInterface {
                 .getContext()
                 .getAuthentication()
                 .getPrincipal();
-        if (userDetails instanceof UserDetails){
-            System.out.println("logged in");
-            return ((UserDetails) userDetails).getUsername();
-        };
+        if (userDetails instanceof UserDetails) return ((UserDetails) userDetails).getUsername();
         return null;
     }
 
@@ -44,7 +38,6 @@ public class SecurityService implements SecurityServiceInterface {
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            logger.debug(String.format("Auto login %s succesfully!", username));
         }
     }
 }

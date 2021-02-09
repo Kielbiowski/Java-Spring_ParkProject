@@ -12,9 +12,7 @@
 </head>
 <body>
 <#include "navbar.ftlh">
-<#if success??>
-    <div class="alert alert-dark" role="alert">Account registered successfully!</div>
-</#if>
+
 <div class="container">
     <div class="row">
         <div class="col-md-5 mx-auto">
@@ -75,8 +73,8 @@
             </div>
         </div>
     </div>
+</div>
 
-
-    <#include "footer.ftlh">
+<#include "footer.ftlh">
 </body>
 </html>

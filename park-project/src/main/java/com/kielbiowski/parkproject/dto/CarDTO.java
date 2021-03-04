@@ -27,9 +27,12 @@ public class CarDTO {
     private String brand;
     private String model;
 
+    public CarDTO(Integer id) {
+        this.id = id;
+    }
+
     @NotNull
     private Size size;
-
     private List<RequestDTO> requestDTOs;
     private List<TransactionDTO> transactionDTOs;
 

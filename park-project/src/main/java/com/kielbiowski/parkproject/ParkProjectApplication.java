@@ -15,19 +15,22 @@ public class ParkProjectApplication {
 
 	public static void main(String[] args) throws Exception {
 		//Initial Structurizr definitions
-		Workspace workspace = new Workspace("ParkProject system structure", "Structure of ParkProject application.");
+		Workspace workspace = new Workspace("ParkProject system structure", "Structure of ParkProject");
 		Model model = workspace.getModel();
+		model.setImpliedRelationshipsStrategy(new CreateImpliedRelationshipsUnlessAnyRelationshipExistsStrategy());
 		ViewSet views = workspace.getViews();
 
 		//Model elements definitions
 		SoftwareSystem application = model.addSoftwareSystem("Application","ParkProject Application");
 		SoftwareSystem database = model.addSoftwareSystem("Database","ParkProject Database");
 		Person user = model.addPerson("User","User of ParkProject");
+		Container container1 = application.addContainer("Container 1");
+		Container container2 = database.addContainer("Container 2");
 
 		//Application view connections
 		user.uses(application,"uses");
-		application.uses(database,"stores data");
-		database.uses(application,"provides data");
+		container1.uses(container2,"stores data");
+		container2.uses(container1,"provides data");
 
 		//System context views definition
 		SystemContextView applicationContextView = views.createSystemContextView(application,"ParkProjectApplication","ParkProject application context view");

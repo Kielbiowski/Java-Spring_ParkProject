@@ -1,6 +1,8 @@
 package com.kielbiowski.parkproject;
 
 import com.structurizr.Workspace;
+import com.structurizr.analysis.ComponentFinder;
+import com.structurizr.analysis.StructurizrAnnotationsComponentFinderStrategy;
 import com.structurizr.api.StructurizrClient;
 import com.structurizr.model.*;
 import com.structurizr.view.*;
@@ -9,45 +11,74 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ParkProjectApplication {
-	private static final long WORKSPACE_ID = 64298;
-	private static final String API_KEY = "9682c417-139d-4dc2-90de-5cfe8e7b4104";
-	private static final String API_SECRET = "b0080bff-5826-4a43-aade-5cc70116b0cd";
+    private static final long WORKSPACE_ID = 64298;
+    private static final String API_KEY = "9682c417-139d-4dc2-90de-5cfe8e7b4104";
+    private static final String API_SECRET = "b0080bff-5826-4a43-aade-5cc70116b0cd";
 
-	public static void main(String[] args) throws Exception {
-		//Initial Structurizr definitions
-		Workspace workspace = new Workspace("ParkProject system structure", "Structure of ParkProject");
-		Model model = workspace.getModel();
-		model.setImpliedRelationshipsStrategy(new CreateImpliedRelationshipsUnlessAnyRelationshipExistsStrategy());
-		ViewSet views = workspace.getViews();
+    public static void main(String[] args) throws Exception {
+        //Initial Structurizr definitions
+        Workspace workspace = new Workspace("ParkProject system structure", "Structure of ParkProject");
+        Model model = workspace.getModel();
+        model.setImpliedRelationshipsStrategy(new CreateImpliedRelationshipsUnlessAnyRelationshipExistsStrategy());
+        ViewSet views = workspace.getViews();
 
-		//Model elements definitions
-		SoftwareSystem application = model.addSoftwareSystem("Application","ParkProject Application");
-		SoftwareSystem database = model.addSoftwareSystem("Database","ParkProject Database");
-		Person user = model.addPerson("User","User of ParkProject");
-		Container container1 = application.addContainer("Container 1");
-		Container container2 = database.addContainer("Container 2");
+        //Model elements definitions
+        //Person
+        Person user = model.addPerson("User", "User of ParkProject");
+        //Software Systems
+        SoftwareSystem parkProject = model.addSoftwareSystem("ParkProject", "");
+        //Containers
+        Container webApp = parkProject.addContainer("Web Application", "ParkProject Web Application", "Spring");
+        ComponentFinder webAppFinder = new ComponentFinder(webApp,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
 
-		//Application view connections
-		user.uses(application,"uses");
-		container1.uses(container2,"stores data");
-		container2.uses(container1,"provides data");
+        Container mobileApp = parkProject.addContainer("Mobile Application", "ParkProject Mobile Application", "Kotlin");
+        ComponentFinder mobileAppFinder = new ComponentFinder(mobileApp,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
 
-		//System context views definition
-		SystemContextView applicationContextView = views.createSystemContextView(application,"ParkProjectApplication","ParkProject application context view");
-		applicationContextView.add(user);
-		applicationContextView.add(application);
-		applicationContextView.add(database);
+        Container database = parkProject.addContainer("Database", "ParkProject Database", "MySQL");
+        ComponentFinder databaseFinder = new ComponentFinder(database,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
 
-		//Styling
-		Styles styles = views.getConfiguration().getStyles();
-		styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
-		styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+        //System context view connections
+        user.uses(webApp, "uses");
+        user.uses(mobileApp, "uses");
+        database.uses(webApp, "provides data");
+        webApp.uses(database, "stores data");
+        database.uses(mobileApp, "provides data");
+        mobileApp.uses(database, "stores data");
 
-		//Server update
-		StructurizrClient structurizrClient = new StructurizrClient(API_KEY, API_SECRET);
-		structurizrClient.putWorkspace(WORKSPACE_ID, workspace);
+        //System context views definition
+        SystemContextView parkProjectContextView = views.createSystemContextView(parkProject, "ParkProjectApplication", "ParkProject application context view");
+        parkProjectContextView.add(user);
 
-		//Spring Application run
-		SpringApplication.run(ParkProjectApplication.class, args);
-	}
+        //Container views definition
+        //WebApp container view
+        ContainerView webAppContainerView = views.createContainerView(parkProject, "WebApplication", "Web Application container view");
+        webAppContainerView.add(user);
+        webAppContainerView.add(webApp);
+        webAppContainerView.add(mobileApp);
+        webAppContainerView.add(database);
+
+        //Component views definition
+        //WebApp components view
+        ComponentView mainControllerComponentView = views.createComponentView(webApp,"MainController","Main Controller Component view");
+        webAppFinder.findComponents().forEach(mainControllerComponentView::add);
+        mainControllerComponentView.addExternalDependencies();
+
+        //Styling
+        Styles styles = views.getConfiguration().getStyles();
+        webApp.addTags("WebApp");
+        mobileApp.addTags("MobileApp");
+        database.addTags("Database");
+        styles.addElementStyle("Database").shape(Shape.Cylinder).background("#1168bd");
+        styles.addElementStyle("WebApp").shape(Shape.WebBrowser).background("#ff8000");
+        styles.addElementStyle("MobileApp").shape(Shape.MobileDeviceLandscape).background("#008000");
+        styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
+        styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
+
+        //Server update
+        StructurizrClient structurizrClient = new StructurizrClient(API_KEY, API_SECRET);
+        structurizrClient.putWorkspace(WORKSPACE_ID, workspace);
+
+        //Spring Application run
+        SpringApplication.run(ParkProjectApplication.class, args);
+    }
 }

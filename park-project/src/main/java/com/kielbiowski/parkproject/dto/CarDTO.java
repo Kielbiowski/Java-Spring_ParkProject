@@ -1,6 +1,7 @@
 package com.kielbiowski.parkproject.dto;
 
 import com.kielbiowski.parkproject.model.*;
+import com.structurizr.annotation.Component;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

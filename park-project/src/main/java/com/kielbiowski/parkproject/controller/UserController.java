@@ -4,6 +4,7 @@ import com.kielbiowski.parkproject.dto.UserDTO;
 import com.kielbiowski.parkproject.service.model.UserService;
 import com.kielbiowski.parkproject.service.security.SecurityService;
 import com.kielbiowski.parkproject.validation.UserDTOValidator;
+import com.structurizr.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Component(description = "Provides user register/login/logout and logged homepage.", technology = "Spring")
+@UsedByContainer(name = "webApp",description = "uses")
+@UsedByPerson(name = "User",description = "uses")
+@UsedByContainer(name = "Database",description = "provides data")
+@UsesContainer(name = "Database", description = "stores data")
 @Controller
 public class UserController {
     private final UserService userService;

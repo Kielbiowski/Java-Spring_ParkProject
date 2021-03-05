@@ -5,9 +5,10 @@ import com.structurizr.analysis.ComponentFinder;
 import com.structurizr.analysis.ComponentFinderStrategy;
 import com.structurizr.api.StructurizrClient;
 import com.structurizr.api.StructurizrClientException;
-import com.structurizr.model.Container;
-import com.structurizr.model.Model;
+import com.structurizr.model.*;
 import com.structurizr.view.ComponentView;
+import com.structurizr.view.ContainerView;
+import com.structurizr.view.SystemContextView;
 import com.structurizr.view.ViewSet;
 
 public class Structurizr {
@@ -28,11 +29,22 @@ public class Structurizr {
     public void createWorkspace(String workspaceName, String workspaceDescription) {
         workspace = new Workspace(workspaceName, workspaceDescription);
         model = workspace.getModel();
+        model.setImpliedRelationshipsStrategy(new CreateImpliedRelationshipsUnlessAnyRelationshipExistsStrategy());
         viewSet = workspace.getViews();
     }
 
+    public void autoCreateSystemContextView(SoftwareSystem softwareSystem, String key, String description) {
+        SystemContextView systemContextView = viewSet.createSystemContextView(softwareSystem, key, description);
+        systemContextView.addNearestNeighbours(softwareSystem);
+    }
+
+    public void autoCreateContainerView(SoftwareSystem softwareSystem, String key, String description) {
+        ContainerView containerView = viewSet.createContainerView(softwareSystem, key, description);
+        containerView.addAllContainersAndInfluencers();
+    }
+
     public void autoCreateComponentView(Container container, String packageName, ComponentFinderStrategy compontntFinderStrategy, String key, String description) throws Exception {
-        ComponentFinder componentFinder = new ComponentFinder(container,packageName,compontntFinderStrategy);
+        ComponentFinder componentFinder = new ComponentFinder(container, packageName, compontntFinderStrategy);
         ComponentView componentView = viewSet.createComponentView(container, key, description);
         componentFinder.findComponents().forEach(componentView::add);
         componentView.addExternalDependencies();

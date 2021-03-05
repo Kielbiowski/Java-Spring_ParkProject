@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Component(description = "Provides user register/login/logout and logged homepage.", technology = "Spring")
 @UsedByContainer(name = "webApp",description = "uses")
 @UsedByPerson(name = "User",description = "uses")
+@UsedByPerson(name = "Admin",description = "administrates")
 @UsedByContainer(name = "API",description = "provides data for")
 @UsesContainer(name = "API", description = "sends data to")
 @Controller

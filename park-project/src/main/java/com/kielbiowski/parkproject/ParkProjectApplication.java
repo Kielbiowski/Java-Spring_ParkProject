@@ -17,29 +17,30 @@ public class ParkProjectApplication {
     private static final String API_SECRET = "b0080bff-5826-4a43-aade-5cc70116b0cd";
 
     public static void main(String[] args) throws Exception {
-        //Initial Structurizr definitions
-        Workspace workspace = new Workspace("ParkProject system structure", "Structure of ParkProject");
-        Model model = workspace.getModel();
-        model.setImpliedRelationshipsStrategy(new CreateImpliedRelationshipsUnlessAnyRelationshipExistsStrategy());
-        ViewSet views = workspace.getViews();
+        Structurizr structurizr = new Structurizr(64298,"9682c417-139d-4dc2-90de-5cfe8e7b4104","b0080bff-5826-4a43-aade-5cc70116b0cd");
+        structurizr.createWorkspace("ParkProject system structure","Structure of ParkProject");
 
         //Model elements definitions
         //Person
-        Person user = model.addPerson("User", "User of ParkProject");
-        Person admin = model.addPerson("Admin", "Administrator of ParkProject");
+        Person user = structurizr.model.addPerson("User", "User of ParkProject");
+        Person admin = structurizr.model.addPerson("Admin", "Administrator of ParkProject");
         //Software Systems
-        SoftwareSystem parkProject = model.addSoftwareSystem("ParkProject System", "Internet system of users parking spaces sharing");
+        SoftwareSystem parkProject = structurizr.model.addSoftwareSystem("ParkProject System", "Internet system of users parking spaces sharing");
         //Containers
         Container api = parkProject.addContainer("API","ParkProject application interface","Java");
         ComponentFinder apiFinder = new ComponentFinder(api,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
         Container webApp = parkProject.addContainer("Web Application", "ParkProject Web Application", "Spring");
-        ComponentFinder webAppFinder = new ComponentFinder(webApp,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
+        //ComponentFinder webAppFinder = new ComponentFinder(webApp,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
         Container mobileApp = parkProject.addContainer("Mobile Application", "ParkProject Mobile Application", "Kotlin");
         ComponentFinder mobileAppFinder = new ComponentFinder(mobileApp,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
         Container database = parkProject.addContainer("Database", "ParkProject Database", "MySQL");
         ComponentFinder databaseFinder = new ComponentFinder(database,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
 
-        //System context view connections
+        //System context diagram connections
+        user.uses(parkProject,"uses");
+        admin.uses(parkProject,"uses");
+
+        //Container diagram connections
         user.uses(webApp, "uses");
         user.uses(mobileApp, "uses");
         admin.uses(webApp,"administrates");
@@ -49,13 +50,13 @@ public class ParkProjectApplication {
         api.uses(mobileApp, "provides data");
 
         //System context views definition
-        SystemContextView parkProjectContextView = views.createSystemContextView(parkProject, "ParkProjectApplication", "ParkProject application context view");
+        SystemContextView parkProjectContextView = structurizr.viewSet.createSystemContextView(parkProject, "ParkProjectApplication", "ParkProject application context view");
         parkProjectContextView.add(user);
         parkProjectContextView.add(admin);
 
         //Container views definition
         //WebApp container view
-        ContainerView webAppContainerView = views.createContainerView(parkProject, "WebApplication", "Web Application container view");
+        ContainerView webAppContainerView = structurizr.viewSet.createContainerView(parkProject, "WebApplication", "Web Application container view");
         webAppContainerView.add(user);
         webAppContainerView.add(admin);
         webAppContainerView.add(api);
@@ -63,14 +64,12 @@ public class ParkProjectApplication {
         webAppContainerView.add(mobileApp);
         webAppContainerView.add(database);
 
-        //Component views definition
         //WebApp components view
-        ComponentView mainControllerComponentView = views.createComponentView(webApp,"MainController","Main Controller Component view");
-        webAppFinder.findComponents().forEach(mainControllerComponentView::add);
-        mainControllerComponentView.addExternalDependencies();
+        structurizr.autoCreateComponentView(webApp,"com.kielbiowski.parkproject",new StructurizrAnnotationsComponentFinderStrategy(),"MainController","Main Controller Component view");
+
 
         //Styling
-        Styles styles = views.getConfiguration().getStyles();
+        Styles styles = structurizr.viewSet.getConfiguration().getStyles();
         webApp.addTags("WebApp");
         mobileApp.addTags("MobileApp");
         database.addTags("Database");
@@ -80,9 +79,7 @@ public class ParkProjectApplication {
         styles.addElementStyle(Tags.SOFTWARE_SYSTEM).background("#1168bd").color("#ffffff");
         styles.addElementStyle(Tags.PERSON).background("#08427b").color("#ffffff").shape(Shape.Person);
 
-        //Server update
-        StructurizrClient structurizrClient = new StructurizrClient(API_KEY, API_SECRET);
-        structurizrClient.putWorkspace(WORKSPACE_ID, workspace);
+        structurizr.update();
 
         //Spring Application run
         SpringApplication.run(ParkProjectApplication.class, args);

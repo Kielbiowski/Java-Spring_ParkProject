@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Component(description = "Provides homepage.", technology = "Spring")
 @UsedByContainer(name = "webApp",description = "uses")
 @UsedByPerson(name = "User",description = "uses")
-@UsedByContainer(name = "atabase",description = "provides data")
+@UsedByContainer(name = "API",description = "provides data for")
 @Controller
 public class MainController {
 

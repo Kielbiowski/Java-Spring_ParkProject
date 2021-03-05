@@ -8,6 +8,7 @@ import com.structurizr.model.*;
 import com.structurizr.view.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.AdviceMode;
 
 @SpringBootApplication
 public class ParkProjectApplication {
@@ -25,34 +26,39 @@ public class ParkProjectApplication {
         //Model elements definitions
         //Person
         Person user = model.addPerson("User", "User of ParkProject");
+        Person admin = model.addPerson("Admin", "Administrator of ParkProject");
         //Software Systems
-        SoftwareSystem parkProject = model.addSoftwareSystem("ParkProject", "");
+        SoftwareSystem parkProject = model.addSoftwareSystem("ParkProject System", "Internet system of users parking spaces sharing");
         //Containers
+        Container api = parkProject.addContainer("API","ParkProject application interface","Java");
+        ComponentFinder apiFinder = new ComponentFinder(api,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
         Container webApp = parkProject.addContainer("Web Application", "ParkProject Web Application", "Spring");
         ComponentFinder webAppFinder = new ComponentFinder(webApp,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
-
         Container mobileApp = parkProject.addContainer("Mobile Application", "ParkProject Mobile Application", "Kotlin");
         ComponentFinder mobileAppFinder = new ComponentFinder(mobileApp,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
-
         Container database = parkProject.addContainer("Database", "ParkProject Database", "MySQL");
         ComponentFinder databaseFinder = new ComponentFinder(database,"com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy());
 
         //System context view connections
         user.uses(webApp, "uses");
         user.uses(mobileApp, "uses");
-        database.uses(webApp, "provides data");
-        webApp.uses(database, "stores data");
-        database.uses(mobileApp, "provides data");
-        mobileApp.uses(database, "stores data");
+        admin.uses(webApp,"administrates");
+        database.uses(api, "provides data");
+        api.uses(database, "stores data");
+        api.uses(webApp, "provides data");
+        api.uses(mobileApp, "provides data");
 
         //System context views definition
         SystemContextView parkProjectContextView = views.createSystemContextView(parkProject, "ParkProjectApplication", "ParkProject application context view");
         parkProjectContextView.add(user);
+        parkProjectContextView.add(admin);
 
         //Container views definition
         //WebApp container view
         ContainerView webAppContainerView = views.createContainerView(parkProject, "WebApplication", "Web Application container view");
         webAppContainerView.add(user);
+        webAppContainerView.add(admin);
+        webAppContainerView.add(api);
         webAppContainerView.add(webApp);
         webAppContainerView.add(mobileApp);
         webAppContainerView.add(database);

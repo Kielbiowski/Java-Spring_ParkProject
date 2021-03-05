@@ -15,6 +15,9 @@
 # Generated files
 .idea/**/contentModel.xml
 
+# Structurizr generated files
+structurizr**.json
+
 # Sensitive or high-churn files
 .idea/**/dataSources/
 .idea/**/dataSources.ids

@@ -3,6 +3,7 @@ package com.kielbiowski.parkproject;
 import com.structurizr.Workspace;
 import com.structurizr.analysis.ComponentFinder;
 import com.structurizr.analysis.ComponentFinderStrategy;
+import com.structurizr.analysis.StructurizrAnnotationsComponentFinderStrategy;
 import com.structurizr.api.StructurizrClient;
 import com.structurizr.api.StructurizrClientException;
 import com.structurizr.model.*;
@@ -10,6 +11,8 @@ import com.structurizr.view.ComponentView;
 import com.structurizr.view.ContainerView;
 import com.structurizr.view.SystemContextView;
 import com.structurizr.view.ViewSet;
+
+import java.util.Set;
 
 public class Structurizr {
     private final long WORKSPACE_ID;
@@ -33,9 +36,30 @@ public class Structurizr {
         viewSet = workspace.getViews();
     }
 
-    public void autoCreateSystemContextView(SoftwareSystem softwareSystem, String key, String description) {
-        SystemContextView systemContextView = viewSet.createSystemContextView(softwareSystem, key, description);
-        systemContextView.addNearestNeighbours(softwareSystem);
+/*
+    public void autoCreateSoftwareSystemViews(SoftwareSystem softwareSystem, String key, String description, String componentPackageName) throws Exception {
+        ComponentFinderStrategy componentFinderStrategy = new StructurizrAnnotationsComponentFinderStrategy();
+
+        for (Container container : softwareSystem.getContainers()) {
+            String componentViewKey = container.getName();
+            String componentViewDescription = componentViewKey + " Component View";
+            autoCreateComponentView(container, componentPackageName, componentFinderStrategy, componentViewKey, componentViewDescription);
+        }
+
+        String containerViewKey = softwareSystem.getName();
+        String containerViewDescription = containerViewKey + " Container View";
+        autoCreateContainerView(softwareSystem,containerViewKey,containerViewDescription);
+
+        autoCreateSystemContextView(softwareSystem,key,description);
+
+    }
+*/
+
+    public void autoCreateComponentView(Container container, String packageName, ComponentFinderStrategy componentFinderStrategy, String key, String description) throws Exception {
+        ComponentFinder componentFinder = new ComponentFinder(container, packageName, componentFinderStrategy);
+        ComponentView componentView = viewSet.createComponentView(container, key, description);
+        componentFinder.findComponents().forEach(componentView::add);
+        componentView.addExternalDependencies();
     }
 
     public void autoCreateContainerView(SoftwareSystem softwareSystem, String key, String description) {
@@ -43,11 +67,9 @@ public class Structurizr {
         containerView.addAllContainersAndInfluencers();
     }
 
-    public void autoCreateComponentView(Container container, String packageName, ComponentFinderStrategy compontntFinderStrategy, String key, String description) throws Exception {
-        ComponentFinder componentFinder = new ComponentFinder(container, packageName, compontntFinderStrategy);
-        ComponentView componentView = viewSet.createComponentView(container, key, description);
-        componentFinder.findComponents().forEach(componentView::add);
-        componentView.addExternalDependencies();
+    public void autoCreateSystemContextView(SoftwareSystem softwareSystem, String key, String description) {
+        SystemContextView systemContextView = viewSet.createSystemContextView(softwareSystem, key, description);
+        systemContextView.addNearestNeighbours(softwareSystem);
     }
 
     public void update() throws StructurizrClientException {

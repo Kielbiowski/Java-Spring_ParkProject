@@ -34,25 +34,16 @@ public class ParkProjectApplication {
 
         //***** Connections *****
 
-        //Containers diagram connections
-        user.uses(webApp, "uses");
-        user.uses(mobileApp, "uses");
-        admin.uses(webApp, "administrates");
-        database.uses(api, "provides data");
-        api.uses(database, "stores data");
-        api.uses(webApp, "provides data");
-        api.uses(mobileApp, "provides data");
-
         //***** Views *****
 
-        //System context views
-        structurizr.autoCreateSystemContextView(parkProject, "ParkProjectApplication", "ParkProject application context view");
+        //Component view
+        structurizr.autoCreateComponentView(webApp, "com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy(), "MainController", "Main Controller Component view");
 
         //Container views
         structurizr.autoCreateContainerView(parkProject, "WebApplication", "Web Application container view");
 
-        //Component vieww
-        structurizr.autoCreateComponentView(webApp, "com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy(), "MainController", "Main Controller Component view");
+        //System context views
+        structurizr.autoCreateSystemContextView(parkProject, "ParkProjectApplication", "ParkProject application context view");
 
         //***** Styling *****
         Styles styles = structurizr.viewSet.getConfiguration().getStyles();

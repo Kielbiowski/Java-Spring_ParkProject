@@ -36,24 +36,26 @@ public class Structurizr {
         viewSet = workspace.getViews();
     }
 
-/*
+
     public void autoCreateSoftwareSystemViews(SoftwareSystem softwareSystem, String key, String description, String componentPackageName) throws Exception {
         ComponentFinderStrategy componentFinderStrategy = new StructurizrAnnotationsComponentFinderStrategy();
+/*
 
         for (Container container : softwareSystem.getContainers()) {
             String componentViewKey = container.getName();
             String componentViewDescription = componentViewKey + " Component View";
-            autoCreateComponentView(container, componentPackageName, componentFinderStrategy, componentViewKey, componentViewDescription);
+            autoCreateComponentView(container, componentPackageName,componentFinderStrategy, componentViewKey, componentViewDescription);
         }
 
+*/
         String containerViewKey = softwareSystem.getName();
         String containerViewDescription = containerViewKey + " Container View";
-        autoCreateContainerView(softwareSystem,containerViewKey,containerViewDescription);
+        autoCreateContainerView(softwareSystem, containerViewKey, containerViewDescription);
 
-        autoCreateSystemContextView(softwareSystem,key,description);
+        autoCreateSystemContextView(softwareSystem, key, description);
 
     }
-*/
+
 
     public void autoCreateComponentView(Container container, String packageName, ComponentFinderStrategy componentFinderStrategy, String key, String description) throws Exception {
         ComponentFinder componentFinder = new ComponentFinder(container, packageName, componentFinderStrategy);

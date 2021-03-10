@@ -39,11 +39,7 @@ public class ParkProjectApplication {
         //Component view
         structurizr.autoCreateComponentView(webApp, "com.kielbiowski.parkproject", new StructurizrAnnotationsComponentFinderStrategy(), "MainController", "Main Controller Component view");
 
-        //Container views
-        structurizr.autoCreateContainerView(parkProject, "WebApplication", "Web Application container view");
-
-        //System context views
-        structurizr.autoCreateSystemContextView(parkProject, "ParkProjectApplication", "ParkProject application context view");
+        structurizr.autoCreateSoftwareSystemViews(parkProject,"ParkProjectApplication", "ParkProject application context view","com.kielbiowski.parkproject");
 
         //***** Styling *****
         Styles styles = structurizr.viewSet.getConfiguration().getStyles();

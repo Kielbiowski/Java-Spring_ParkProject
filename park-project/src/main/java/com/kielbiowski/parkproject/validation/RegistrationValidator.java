@@ -10,12 +10,12 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 @Component
-public class UserDTOValidator implements Validator {
+public class RegistrationValidator implements Validator {
 
     private final UserService userService;
 
     @Autowired
-    public UserDTOValidator(UserService userService) {
+    public RegistrationValidator(UserService userService) {
         this.userService = userService;
     }
 
@@ -44,5 +44,7 @@ public class UserDTOValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwordConfirm", "NotEmpty");
         if (!errors.hasFieldErrors("passwordConfirm") && !userDTO.getPassword().equals(userDTO.getPasswordConfirm()))
             errors.rejectValue("passwordConfirm", "Password.diff");
+
+
     }
 }

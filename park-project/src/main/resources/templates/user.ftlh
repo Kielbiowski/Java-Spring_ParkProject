@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>User</title>
+    <title>Account Details</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -12,72 +12,54 @@
 </head>
 <body>
 <#include "navbar.ftlh">
-<#if success??>
-    <h1>Account updated succesfully!</h1>
-    Your email is: ${userDTO.email}
-<#else>
-    <h1>User information</h1>
 
-    Contact details:
-    <ul>
-        <#if userDTO.name??>
-            <li>Name: ${userDTO.name}</li>
-        </#if>
-        <#if userDTO.surname??>
-            <li>Surname: ${userDTO.surname}</li>
-        </#if>
-        <#if userDTO.phoneNumber??>
-            <li>Phone number: ${userDTO.phoneNumber}</li>
-        </#if>
-        <li>Email: ${userDTO.email}</li>
-    </ul>
-
-    Account balance: ${userDTO.accountBalance}<br>
-
-    <#list userDTO.carDTOs>
-        Cars:
-        <ul>
-            <#items as carDTO>
-                <li>
-                    <ol>
-                        <li>Number plate: ${carDTO.numberPlate}</li>
-                        <li>Brand: ${carDTO.brand}</li>
-                        <li>Model: ${carDTO.model}</li>
-                        <li>Color: ${carDTO.color}</li>
-                        <li>Spot number: ${carDTO.spotDTO.number}</li>
-                    </ol>
-                </li>
-            </#items>
-        </ul>
-    </#list>
-
-    <#list userDTO.spotDTOs>
-        Spots:
-        <ul>
-            <#items as spotDTO>
-                <li>
-                    <ol>
-                        <li>Country: ${spotDTO.parkingDTO.country}</li>
-                        <li>City: ${spotDTO.parkingDTO.city}</li>
-                        <li>Street: ${spotDTO.parkingDTO.street}</li>
-                        <li>Street number:${spotDTO.parkingDTO.streetNumber}</li>
-                        <li>Spot number:${spotDTO.number}</li>
-                        <li>Size: ${spotDTO.size}</li>
-                        <li>Price per hour: ${spotDTO.parkingDTO.pricePerHour}</li>
-                        <li>Car parked:
-                            <ol>
-                                <li>Number plate: ${spotDTO.carDTO.numberPlate}</li>
-                                <li>Brand: ${spotDTO.carDTO.brand}</li>
-                                <li>Model: ${spotDTO.carDTO.model}</li>
-                                <li>Color: ${spotDTO.carDTO.color}</li>
-                            </ol>
-                        </li>
-                    </ol>
-                </li>
-            </#items>
-        </ul>
-    </#list>
-
+<#if registration??>
+    <div class="alert alert-dark" role="alert">Account registered successfully!</div>
 </#if>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="logo mb-3">
+                <div class="col-md-12 text-center">
+                    <br><br><br>
+                    <img src="/images/logo.png" alt="Logo" style="width:300px;"><br><br>
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <h1>Your contact details</h1>
+                <br>
+                <ul class="list-group">
+                    <li class="list-group-item active">Email: ${userDTO.email}</li>
+                    <#if userDTO.name??>
+                        <li class="list-group-item">Name: ${userDTO.name}</li>
+                    </#if>
+                    <#if userDTO.surname??>
+                        <li class="list-group-item">Surname: ${userDTO.surname}</li>
+                    </#if>
+                    <#if userDTO.phoneNumber??>
+                        <li class="list-group-item">Phone number: ${userDTO.phoneNumber}</li>
+                    </#if>
+                </ul>
+                <br><br>
+                <a class="btn btn-block mybtn btn-primary tx-tfm" href="/user/details" role="button">Update your contact details</a>
+                <br><br>
+            </div>
+            <div class="col-md-12 text-center">
+                <h1>Your account balance</h1>
+                <br>
+                <ul class="list-group">
+                    <li class="list-group-item">Account balance: ${userDTO.accountBalance}</li>
+                </ul>
+                <br><br>
+                <a class="btn btn-block mybtn btn-primary tx-tfm disabled" href="#" role="button">Manage your account balance</a>
+                <br><br>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<#include "footer.ftlh">
 </body>
 </html>

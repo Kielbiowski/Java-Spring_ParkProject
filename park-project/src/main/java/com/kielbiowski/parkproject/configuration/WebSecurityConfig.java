@@ -1,5 +1,6 @@
 package com.kielbiowski.parkproject.configuration;
 
+import com.kielbiowski.parkproject.service.security.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -16,27 +17,36 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
+    private final CustomAuthenticationProvider authenticationProvider;
+
+   @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+       return new BCryptPasswordEncoder();
+   }
 
     @Autowired
-    public WebSecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
+    public WebSecurityConfig(@Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
+                             CustomAuthenticationProvider customAuthenticationProvider) {
         this.userDetailsService = userDetailsService;
+        this.authenticationProvider = customAuthenticationProvider;
     }
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.authenticationProvider(authenticationProvider);
     }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/register","/","/index","/images/**").permitAll()
+                .antMatchers("/register", "/", "/index", "/images/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/index",true)
+                .defaultSuccessUrl("/index", true)
                 .permitAll()
                 .and()
                 .logout()
@@ -44,12 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AuthenticationManager customAuthenticationManager() throws Exception{
+    public AuthenticationManager customAuthenticationManager() throws Exception {
         return authenticationManager();
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception{
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 }

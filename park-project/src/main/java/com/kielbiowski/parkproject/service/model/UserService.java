@@ -44,12 +44,7 @@ public class UserService implements ServiceInterface<UserDTO> {
     @Override
     public UserDTO create(UserDTO userDTO) {
         userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-        //Null-safe stream done with Java 9' Stream.ofNullable
         userDTO.setRoleDTOs(List.of(RoleDTO.toRoleDTO(roleRepository.findById(2).orElseThrow(NotFoundException::new))));
-        /*userDTO.setRoleDTOs(Stream.ofNullable(roleRepository.findAll())
-                .flatMap(Collection::stream)
-                .map(RoleDTO::toRoleDTO)
-                .collect(Collectors.toList()));*/
         return UserDTO.toUserDTO(userRepository.save(UserDTO.toUser(userDTO)));
     }
 

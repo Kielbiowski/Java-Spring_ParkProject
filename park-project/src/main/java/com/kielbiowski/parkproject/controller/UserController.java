@@ -51,7 +51,7 @@ public class UserController {
 
         model.addAttribute("userDTO",userDTO);
         model.addAttribute("success", true);
-        return "user";
+        return "oldUser";
     }
 
 }
